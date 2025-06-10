@@ -1,10 +1,18 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import path from "path";
 import { storage } from "./storage";
 import { insertCategorySchema, insertProductSchema, insertRequestSchema } from "@shared/schema";
 import { sendTelegramMessage } from "./telegram";
+import { uploadMiddleware, handleImageUpload } from "./upload";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Static file serving for uploaded images
+  app.use('/imagescat', require('express').static(path.join(process.cwd(), 'imagescat')));
+
+  // Image upload route
+  app.post('/api/upload', uploadMiddleware, handleImageUpload);
+
   // Authentication routes
   app.post("/api/auth/login", async (req, res) => {
     try {

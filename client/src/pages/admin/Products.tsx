@@ -21,6 +21,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Plus, Edit, Trash2 } from "lucide-react";
+import { ImageUploader } from "@/components/ImageUploader";
 
 interface ProductFormData {
   name_ru: string;
@@ -340,17 +341,13 @@ export default function Products() {
                 </Select>
               </div>
 
-              <div>
-                <Label htmlFor="image_url">URL изображения</Label>
-                <Input
-                  id="image_url"
-                  type="url"
-                  value={formData.image_url}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, image_url: e.target.value }))
-                  }
-                />
-              </div>
+              <ImageUploader
+                label="Изображение товара"
+                value={formData.image_url}
+                onChange={(url) =>
+                  setFormData((prev) => ({ ...prev, image_url: url }))
+                }
+              />
 
               <div className="flex items-center space-x-2">
                 <Switch
