@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { type User } from "@shared/schema";
 
 interface AuthContextType {
@@ -40,10 +40,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const isAuthenticated = !!user;
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
-      {children}
-    </AuthContext.Provider>
+  return React.createElement(
+    AuthContext.Provider,
+    { value: { user, login, logout, isAuthenticated } },
+    children
   );
 }
 
