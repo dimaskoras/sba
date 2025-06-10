@@ -11,7 +11,7 @@ import { Search } from "lucide-react";
 export default function Catalog() {
   const { t, language } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -21,7 +21,7 @@ export default function Catalog() {
     queryKey: ["/api/products", { category: selectedCategory, search: searchQuery }],
     queryFn: () => {
       const params = new URLSearchParams();
-      if (selectedCategory) params.append("category", selectedCategory);
+      if (selectedCategory && selectedCategory !== "all") params.append("category", selectedCategory);
       if (searchQuery) params.append("search", searchQuery);
       
       return fetch(`/api/products?${params.toString()}`, {
@@ -70,7 +70,7 @@ export default function Catalog() {
               <SelectValue placeholder={t("common.all_categories")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">{t("common.all_categories")}</SelectItem>
+              <SelectItem value="all">{t("common.all_categories")}</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category.id} value={category.id.toString()}>
                   {language === "kz" ? category.name_kz : category.name_ru}
