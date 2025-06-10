@@ -18,7 +18,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Edit, Trash2 } from "lucide-react";
-import ImageUploader from "@/components/ImageUploader";
 
 interface CategoryFormData {
   name_ru: string;
@@ -233,13 +232,17 @@ export default function Categories() {
                 </div>
               </div>
 
-              <ImageUploader
-                label="Изображение категории"
-                currentImage={formData.image_url}
-                onImageUpload={(imageUrl) =>
-                  setFormData((prev) => ({ ...prev, image_url: imageUrl }))
-                }
-              />
+              <div>
+                <Label htmlFor="image_url">URL изображения</Label>
+                <Input
+                  id="image_url"
+                  type="url"
+                  value={formData.image_url}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, image_url: e.target.value }))
+                  }
+                />
+              </div>
 
               <div className="flex space-x-4">
                 <Button
