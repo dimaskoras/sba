@@ -15,6 +15,7 @@ import AdminLogin from "@/pages/admin/Login";
 import AdminDashboard from "@/pages/admin/Dashboard";
 import AdminProducts from "@/pages/admin/Products";
 import AdminCategories from "@/pages/admin/Categories";
+import AdminRequests from "@/pages/admin/Requests";
 import NotFound from "@/pages/not-found";
 
 function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -28,6 +29,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
               <a href="/admin/dashboard" className="text-brand-primary hover:text-brand-primary/80">Панель</a>
               <a href="/admin/products" className="text-brand-primary hover:text-brand-primary/80">Товары</a>
               <a href="/admin/categories" className="text-brand-primary hover:text-brand-primary/80">Категории</a>
+              <a href="/admin/requests" className="text-brand-primary hover:text-brand-primary/80">Заявки</a>
               <a href="/" className="text-gray-600 hover:text-gray-800">На сайт</a>
             </nav>
           </div>
@@ -62,6 +64,11 @@ function Router() {
       <Route path="/admin/categories">
         <AdminLayout>
           <AdminCategories />
+        </AdminLayout>
+      </Route>
+      <Route path="/admin/requests">
+        <AdminLayout>
+          <AdminRequests />
         </AdminLayout>
       </Route>
       

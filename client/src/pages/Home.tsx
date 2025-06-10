@@ -50,11 +50,11 @@ export default function Home() {
   ];
 
   return (
-    <div>
+    <div className="animate-fade-in">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-brand-primary to-blue-900 text-white py-20">
+      <section className="relative bg-gradient-to-r from-brand-primary to-blue-900 text-white py-20 overflow-hidden">
         <div
-          className="absolute inset-0 opacity-20 bg-cover bg-center"
+          className="absolute inset-0 opacity-20 bg-cover bg-center transition-transform duration-700 hover:scale-105"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=800')",
@@ -62,17 +62,17 @@ export default function Home() {
         />
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
+          <div className="max-w-3xl animate-slide-up">
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6 animate-slide-down">
               {t("hero.title")}
             </h1>
-            <p className="text-xl lg:text-2xl mb-8 text-gray-100">
+            <p className="text-xl lg:text-2xl mb-8 text-gray-100 animate-slide-up" style={{ animationDelay: '0.2s' }}>
               {t("hero.subtitle")}
             </p>
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 animate-scale-in" style={{ animationDelay: '0.4s' }}>
               <Button
                 onClick={() => setIsRequestModalOpen(true)}
-                className="bg-brand-secondary hover:bg-brand-secondary/90 text-white px-8 py-4 text-lg h-auto"
+                className="bg-brand-secondary hover:bg-brand-secondary/90 text-white px-8 py-4 text-lg h-auto transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
               >
                 <Send className="w-5 h-5 mr-2" />
                 {t("hero.cta_request")}
@@ -80,7 +80,7 @@ export default function Home() {
               <Link href="/catalog">
                 <Button
                   variant="outline"
-                  className="bg-white text-brand-primary border-white hover:bg-gray-100 px-8 py-4 text-lg h-auto w-full sm:w-auto"
+                  className="bg-white text-brand-primary border-white hover:bg-gray-100 px-8 py-4 text-lg h-auto w-full sm:w-auto transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
                 >
                   <Eye className="w-5 h-5 mr-2" />
                   {t("hero.cta_catalog")}
