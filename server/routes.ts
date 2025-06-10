@@ -3,8 +3,35 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertCategorySchema, insertProductSchema, insertRequestSchema } from "@shared/schema";
 import { sendTelegramMessage } from "./telegram";
+import { uploadImage, processAndSaveImage } from "./upload";
+import express from "express";
+import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Статические файлы для изображений
+  app.use('/images', express.static(path.join(process.cwd(), 'photosran')));
+
+  // Маршрут загрузки изображений
+  app.post("/api/upload", uploadImage, async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "Файл не найден" });
+      }
+
+      const imageUrl = await processAndSaveImage(req.file.buffer, req.file.originalname);
+      
+      res.json({ 
+        url: imageUrl,
+        message: "Изображение успешно загружено" 
+      });
+    } catch (error) {
+      console.error('Ошибка загрузки изображения:', error);
+      res.status(500).json({ 
+        message: error instanceof Error ? error.message : "Ошибка загрузки изображения" 
+      });
+    }
+  });
+
   // Authentication routes
   app.post("/api/auth/login", async (req, res) => {
     try {
