@@ -3,8 +3,44 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertCategorySchema, insertProductSchema, insertRequestSchema } from "@shared/schema";
 import { sendTelegramMessage } from "./telegram";
+import { upload, uploadImage, getImage } from "./upload";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Image upload and serving routes
+  app.post("/api/images/upload", upload.single('image'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No image file provided" });
+      }
+
+      const imageUrl = await uploadImage(req.file.buffer, req.file.originalname);
+      res.json({ url: imageUrl });
+    } catch (error) {
+      console.error('Upload error:', error);
+      res.status(500).json({ message: "Failed to upload image" });
+    }
+  });
+
+  app.get("/api/images/*", async (req, res) => {
+    try {
+      const filename = req.path.replace('/api/images/', '');
+      const imageBuffer = await getImage(filename);
+      
+      // Set appropriate content type
+      const ext = filename.split('.').pop()?.toLowerCase();
+      let contentType = 'image/jpeg';
+      if (ext === 'png') contentType = 'image/png';
+      else if (ext === 'gif') contentType = 'image/gif';
+      else if (ext === 'webp') contentType = 'image/webp';
+      
+      res.set('Content-Type', contentType);
+      res.set('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+      res.send(imageBuffer);
+    } catch (error) {
+      res.status(404).json({ message: "Image not found" });
+    }
+  });
+
   // Authentication routes
   app.post("/api/auth/login", async (req, res) => {
     try {
