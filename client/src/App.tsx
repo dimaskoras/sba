@@ -1,0 +1,96 @@
+import { Switch, Route } from "wouter";
+import { queryClient } from "./lib/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Layout } from "@/components/Layout";
+import { AuthProvider } from "@/hooks/useAuth";
+
+// Pages
+import Home from "@/pages/Home";
+import Catalog from "@/pages/Catalog";
+import About from "@/pages/About";
+import Contacts from "@/pages/Contacts";
+import AdminLogin from "@/pages/admin/Login";
+import AdminDashboard from "@/pages/admin/Dashboard";
+import AdminProducts from "@/pages/admin/Products";
+import AdminCategories from "@/pages/admin/Categories";
+import NotFound from "@/pages/not-found";
+
+function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="border-b bg-white">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold text-gray-900">SmartBuildAstana - Админ панель</h1>
+            <nav className="flex space-x-4">
+              <a href="/admin/dashboard" className="text-brand-primary hover:text-brand-primary/80">Панель</a>
+              <a href="/admin/products" className="text-brand-primary hover:text-brand-primary/80">Товары</a>
+              <a href="/admin/categories" className="text-brand-primary hover:text-brand-primary/80">Категории</a>
+              <a href="/" className="text-gray-600 hover:text-gray-800">На сайт</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div>{children}</div>
+    </div>
+  );
+}
+
+function Router() {
+  return (
+    <Switch>
+      {/* Public routes */}
+      <Route path="/" component={Home} />
+      <Route path="/catalog" component={Catalog} />
+      <Route path="/about" component={About} />
+      <Route path="/contacts" component={Contacts} />
+      
+      {/* Admin routes */}
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin/dashboard">
+        <AdminLayout>
+          <AdminDashboard />
+        </AdminLayout>
+      </Route>
+      <Route path="/admin/products">
+        <AdminLayout>
+          <AdminProducts />
+        </AdminLayout>
+      </Route>
+      <Route path="/admin/categories">
+        <AdminLayout>
+          <AdminCategories />
+        </AdminLayout>
+      </Route>
+      
+      {/* Fallback to 404 */}
+      <Route component={NotFound} />
+    </Switch>
+  );
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Switch>
+            <Route path="/admin/*">
+              <Router />
+            </Route>
+            <Route>
+              <Layout>
+                <Router />
+              </Layout>
+            </Route>
+          </Switch>
+          <Toaster />
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;
