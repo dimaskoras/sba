@@ -127,10 +127,23 @@ export default function Products() {
         category_id: formData.category_id || undefined,
       });
 
+      const cleanData: ProductFormData = {
+        name_ru: validatedData.name_ru,
+        name_kz: validatedData.name_kz,
+        description_ru: validatedData.description_ru || "",
+        description_kz: validatedData.description_kz || "",
+        price: validatedData.price,
+        unit_ru: validatedData.unit_ru,
+        unit_kz: validatedData.unit_kz,
+        category_id: validatedData.category_id || null,
+        image_url: validatedData.image_url || "",
+        in_stock: validatedData.in_stock ?? true,
+      };
+
       if (editingProduct) {
-        updateMutation.mutate({ id: editingProduct.id, data: validatedData });
+        updateMutation.mutate({ id: editingProduct.id, data: cleanData });
       } else {
-        createMutation.mutate(validatedData);
+        createMutation.mutate(cleanData);
       }
     } catch (error) {
       toast({
@@ -143,7 +156,7 @@ export default function Products() {
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
-    setFormData({
+    const editData = {
       name_ru: product.name_ru,
       name_kz: product.name_kz,
       description_ru: product.description_ru || "",
@@ -154,7 +167,8 @@ export default function Products() {
       category_id: product.category_id,
       image_url: product.image_url || "",
       in_stock: product.in_stock ?? true,
-    });
+    };
+    setFormData(editData);
     setIsDialogOpen(true);
   };
 

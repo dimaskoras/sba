@@ -94,7 +94,7 @@ export default function Home() {
       {/* Features Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 animate-slide-up">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               {t("features.title")}
             </h2>
@@ -107,15 +107,16 @@ export default function Home() {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="text-center p-6 rounded-lg hover:shadow-lg transition-shadow"
+                className="text-center p-6 rounded-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-scale-in"
+                style={{ animationDelay: `${index * 200}ms` }}
               >
-                <div className="bg-brand-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <div className="bg-brand-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 transform transition-transform duration-300 hover:scale-110">
                   <feature.icon className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                <h3 className="text-xl font-semibold text-gray-900 mb-3 transition-colors duration-300 hover:text-brand-primary">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -125,7 +126,7 @@ export default function Home() {
       {/* Categories Preview */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 animate-slide-up">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               {t("catalog.title")}
             </h2>
@@ -133,23 +134,33 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-            {categories.map((category) => (
+            {categories.map((category, index) => (
               <Link key={category.id} href="/catalog">
-                <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-                  {category.image_url && (
-                    <img
-                      src={category.image_url}
-                      alt={
-                        language === "kz" ? category.name_kz : category.name_ru
-                      }
-                      className="w-full h-48 object-cover"
-                    />
-                  )}
+                <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer animate-scale-in" style={{ animationDelay: `${index * 150}ms` }}>
+                  <div className="relative overflow-hidden">
+                    {category.image_url ? (
+                      <img
+                        src={category.image_url}
+                        alt={
+                          language === "kz" ? category.name_kz : category.name_ru
+                        }
+                        className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-48 bg-gradient-to-br from-brand-primary/10 to-brand-primary/5 flex items-center justify-center">
+                        <div className="w-16 h-16 bg-brand-primary/20 rounded-full flex items-center justify-center">
+                          <span className="text-brand-primary text-2xl font-bold">
+                            {(language === "kz" ? category.name_kz : category.name_ru).charAt(0)}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   <CardContent className="p-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2 transition-colors duration-300 hover:text-brand-primary">
                       {language === "kz" ? category.name_kz : category.name_ru}
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
                       {language === "kz"
                         ? category.description_kz
                         : category.description_ru}
@@ -162,7 +173,7 @@ export default function Home() {
                         }{" "}
                         товаров
                       </span>
-                      <span className="text-brand-primary font-medium">
+                      <span className="text-brand-primary font-medium transition-transform duration-300 group-hover:translate-x-1">
                         Подробнее →
                       </span>
                     </div>
@@ -174,21 +185,27 @@ export default function Home() {
 
           {/* Featured Products */}
           {featuredProducts.length > 0 && (
-            <div className="mb-8">
+            <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.6s' }}>
               <h3 className="text-2xl font-bold text-gray-900 mb-6">
                 Популярные товары
               </h3>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {featuredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                {featuredProducts.map((product, index) => (
+                  <div 
+                    key={product.id}
+                    className="animate-scale-in"
+                    style={{ animationDelay: `${800 + index * 150}ms` }}
+                  >
+                    <ProductCard product={product} />
+                  </div>
                 ))}
               </div>
             </div>
           )}
 
-          <div className="text-center">
+          <div className="text-center animate-bounce-in" style={{ animationDelay: '1.2s' }}>
             <Link href="/catalog">
-              <Button className="bg-brand-primary hover:bg-brand-primary/90 text-white px-8 py-3 text-lg">
+              <Button className="bg-brand-primary hover:bg-brand-primary/90 text-white px-8 py-3 text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                 <Eye className="w-5 h-5 mr-2" />
                 {t("catalog.view_all")}
               </Button>

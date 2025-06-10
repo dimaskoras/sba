@@ -190,7 +190,7 @@ export default function Catalog() {
                   className="animate-in slide-in-from-bottom-5"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <ProductCard product={product} category={selectedCategory} />
+                  <ProductCard product={product} category={selectedCategory || undefined} />
                 </div>
               ))}
             </div>
