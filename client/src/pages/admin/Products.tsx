@@ -121,7 +121,7 @@ export default function Products() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const validatedData = insertProductSchema.parse({
         ...formData,
@@ -216,11 +216,9 @@ export default function Products() {
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>
-                {editingProduct ? "Редактировать товар" : "Добавить товар"}
-              </DialogTitle>
-            </DialogHeader>
+            <DialogTitle>
+              {editingProduct ? "Редактировать товар" : "Добавить товар"}
+            </DialogTitle>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
