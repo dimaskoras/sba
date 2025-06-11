@@ -8,6 +8,7 @@ import { type Category, insertCategorySchema } from "@shared/schema";
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -103,7 +104,7 @@ export default function Categories() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     try {
       const validatedData = insertCategorySchema.parse(formData);
 
