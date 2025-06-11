@@ -1,10 +1,11 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Layout } from "@/components/Layout";
-import { AuthProvider } from "@/hooks/useAuth";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { ProtectedAdminRoute } from "@/components/ProtectedAdminRoute";
 
 // Pages
 import Home from "@/pages/Home";
@@ -19,19 +20,38 @@ import AdminRequests from "@/pages/admin/Requests";
 import NotFound from "@/pages/not-found";
 
 function AdminLayout({ children }: { children: React.ReactNode }) {
+  const { logout, user } = useAuth();
+  const [, setLocation] = useLocation();
+
+  const handleLogout = () => {
+    logout();
+    setLocation("/admin/login");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="border-b bg-white">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-gray-900">SmartBuildAstana - Админ панель</h1>
-            <nav className="flex space-x-4">
-              <a href="/admin/dashboard" className="text-brand-primary hover:text-brand-primary/80">Панель</a>
-              <a href="/admin/products" className="text-brand-primary hover:text-brand-primary/80">Товары</a>
-              <a href="/admin/categories" className="text-brand-primary hover:text-brand-primary/80">Категории</a>
-              <a href="/admin/requests" className="text-brand-primary hover:text-brand-primary/80">Заявки</a>
-              <a href="/" className="text-gray-600 hover:text-gray-800">На сайт</a>
-            </nav>
+            <div className="flex items-center space-x-4">
+              <nav className="flex space-x-4">
+                <a href="/admin/dashboard" className="text-brand-primary hover:text-brand-primary/80">Панель</a>
+                <a href="/admin/products" className="text-brand-primary hover:text-brand-primary/80">Товары</a>
+                <a href="/admin/categories" className="text-brand-primary hover:text-brand-primary/80">Категории</a>
+                <a href="/admin/requests" className="text-brand-primary hover:text-brand-primary/80">Заявки</a>
+                <a href="/" className="text-gray-600 hover:text-gray-800">На сайт</a>
+              </nav>
+              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <span>Пользователь: {user?.username}</span>
+                <button 
+                  onClick={handleLogout}
+                  className="text-red-600 hover:text-red-800 font-medium"
+                >
+                  Выйти
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -52,24 +72,32 @@ function Router() {
       {/* Admin routes */}
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/dashboard">
-        <AdminLayout>
-          <AdminDashboard />
-        </AdminLayout>
+        <ProtectedAdminRoute>
+          <AdminLayout>
+            <AdminDashboard />
+          </AdminLayout>
+        </ProtectedAdminRoute>
       </Route>
       <Route path="/admin/products">
-        <AdminLayout>
-          <AdminProducts />
-        </AdminLayout>
+        <ProtectedAdminRoute>
+          <AdminLayout>
+            <AdminProducts />
+          </AdminLayout>
+        </ProtectedAdminRoute>
       </Route>
       <Route path="/admin/categories">
-        <AdminLayout>
-          <AdminCategories />
-        </AdminLayout>
+        <ProtectedAdminRoute>
+          <AdminLayout>
+            <AdminCategories />
+          </AdminLayout>
+        </ProtectedAdminRoute>
       </Route>
       <Route path="/admin/requests">
-        <AdminLayout>
-          <AdminRequests />
-        </AdminLayout>
+        <ProtectedAdminRoute>
+          <AdminLayout>
+            <AdminRequests />
+          </AdminLayout>
+        </ProtectedAdminRoute>
       </Route>
       
       {/* Fallback to 404 */}

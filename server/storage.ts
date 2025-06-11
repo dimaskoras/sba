@@ -27,7 +27,10 @@ export interface IStorage {
   getAllRequests(): Promise<Request[]>;
 }
 
+import { FileStorage } from './fileStorage';
+
 export class MemStorage implements IStorage {
+  private fileStorage: FileStorage;
   private users: Map<number, User>;
   private categories: Map<number, Category>;
   private products: Map<number, Product>;
