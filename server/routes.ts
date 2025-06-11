@@ -3,8 +3,17 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertCategorySchema, insertProductSchema, insertRequestSchema } from "@shared/schema";
 import { sendTelegramMessage } from "./telegram";
+import { uploadSingle, handleImageUpload } from "./upload";
+import path from "path";
+import express from "express";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Статическая подача загруженных изображений
+  app.use('/uploads', express.static(path.join(process.cwd(), 'photosran')));
+
+  // Маршрут для загрузки изображений
+  app.post("/api/upload/image", uploadSingle, handleImageUpload);
+
   // Authentication routes
   app.post("/api/auth/login", async (req, res) => {
     try {

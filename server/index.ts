@@ -41,10 +41,21 @@ app.use((req, res, next) => {
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+    let message = err.message || "Internal Server Error";
+
+    // Специальная обработка ошибок загрузки файлов
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      message = 'Файл слишком большой. Максимальный размер: 10MB';
+    } else if (err.message && err.message.includes('Недопустимый формат файла')) {
+      message = err.message;
+    }
 
     res.status(status).json({ message });
-    throw err;
+    
+    // Логируем ошибку только если это не ошибка валидации файла
+    if (status >= 500) {
+      console.error('Server error:', err);
+    }
   });
 
   // importantly only setup vite in development and after
