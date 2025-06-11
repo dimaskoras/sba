@@ -1,7 +1,11 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCategorySchema, insertProductSchema, insertRequestSchema } from "../shared/schema";
+import {
+  insertCategorySchema,
+  insertProductSchema,
+  insertRequestSchema,
+} from "../shared/schema";
 import { sendTelegramMessage } from "./telegram";
 import { uploadSingle, handleImageUpload } from "./upload";
 import path from "path";
@@ -9,7 +13,7 @@ import express from "express";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Статическая подача загруженных изображений
-  app.use('/uploads', express.static(path.join(process.cwd(), 'photosran')));
+  app.use("/uploads", express.static(path.join(process.cwd(), "photosran")));
 
   // Маршрут для загрузки изображений
   app.post("/api/upload/image", uploadSingle, handleImageUpload);
@@ -19,11 +23,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { username, password } = req.body;
       const user = await storage.getUserByUsername(username);
-      
+
       if (!user || user.password !== password) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
-      
+
       res.json({ user: { id: user.id, username: user.username } });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
@@ -44,11 +48,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const category = await storage.getCategoryById(id);
-      
+
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
       }
-      
+
       res.json(category);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch category" });
@@ -70,11 +74,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const validatedData = insertCategorySchema.partial().parse(req.body);
       const category = await storage.updateCategory(id, validatedData);
-      
+
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
       }
-      
+
       res.json(category);
     } catch (error) {
       res.status(400).json({ message: "Invalid category data" });
@@ -85,11 +89,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const deleted = await storage.deleteCategory(id);
-      
+
       if (!deleted) {
         return res.status(404).json({ message: "Category not found" });
       }
-      
+
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete category" });
@@ -105,7 +109,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (search) {
         products = await storage.searchProducts(search as string);
       } else if (category) {
-        products = await storage.getProductsByCategory(parseInt(category as string));
+        products = await storage.getProductsByCategory(
+          parseInt(category as string),
+        );
       } else {
         products = await storage.getAllProducts();
       }
@@ -120,11 +126,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const product = await storage.getProductById(id);
-      
+
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
-      
+
       res.json(product);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch product" });
@@ -146,11 +152,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const validatedData = insertProductSchema.partial().parse(req.body);
       const product = await storage.updateProduct(id, validatedData);
-      
+
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
-      
+
       res.json(product);
     } catch (error) {
       res.status(400).json({ message: "Invalid product data" });
@@ -161,11 +167,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const deleted = await storage.deleteProduct(id);
-      
+
       if (!deleted) {
         return res.status(404).json({ message: "Product not found" });
       }
-      
+
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete product" });
@@ -177,7 +183,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertRequestSchema.parse(req.body);
       const request = await storage.createRequest(validatedData);
-      
+
       // Send Telegram notification
       try {
         await sendTelegramMessage(request);
@@ -185,7 +191,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error("Failed to send Telegram message:", telegramError);
         // Continue even if Telegram fails
       }
-      
+
       res.status(201).json(request);
     } catch (error) {
       res.status(400).json({ message: "Invalid request data" });
