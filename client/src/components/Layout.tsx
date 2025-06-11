@@ -103,12 +103,6 @@ export function Layout({ children }: LayoutProps) {
                   {item.label}
                 </Link>
               ))}
-              <Link
-                href="/admin/login"
-                className="text-gray-700 hover:text-brand-primary font-medium transition-colors"
-              >
-                {t("nav.admin")}
-              </Link>
             </div>
 
             {/* Language switcher and mobile menu */}
@@ -138,13 +132,6 @@ export function Layout({ children }: LayoutProps) {
                         {item.label}
                       </Link>
                     ))}
-                    <Link
-                      href="/admin/login"
-                      className="text-gray-700 hover:text-brand-primary font-medium transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {t("nav.admin")}
-                    </Link>
                   </div>
                 </SheetContent>
               </Sheet>

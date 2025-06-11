@@ -41,7 +41,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
                 <a href="/admin/products" className="text-brand-primary hover:text-brand-primary/80">Товары</a>
                 <a href="/admin/categories" className="text-brand-primary hover:text-brand-primary/80">Категории</a>
                 <a href="/admin/requests" className="text-brand-primary hover:text-brand-primary/80">Заявки</a>
-                <a href="/" className="text-gray-600 hover:text-gray-800">На сайт</a>
+                
               </nav>
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <span>Пользователь: {user?.username}</span>
