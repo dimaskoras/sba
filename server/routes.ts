@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCategorySchema, insertProductSchema, insertRequestSchema } from "@shared/schema";
+import { insertCategorySchema, insertProductSchema, insertRequestSchema } from "../shared/schema";
 import { sendTelegramMessage } from "./telegram";
 import { uploadSingle, handleImageUpload } from "./upload";
 import path from "path";
