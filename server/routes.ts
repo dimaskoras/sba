@@ -8,6 +8,7 @@ import {
 } from "../shared/schema";
 import { sendTelegramMessage } from "./telegram";
 import { uploadSingle, handleImageUpload } from "./upload";
+import { requireAuth } from "./auth";
 import path from "path";
 import express from "express";
 
@@ -15,8 +16,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Статическая подача загруженных изображений
   app.use("/uploads", express.static(path.join(process.cwd(), "photosran")));
 
-  // Маршрут для загрузки изображений
-  app.post("/api/upload/image", uploadSingle, handleImageUpload);
+  // Маршрут для загрузки изображений (защищенный)
+  app.post("/api/upload/image", requireAuth, uploadSingle, handleImageUpload);
 
   // Authentication routes
   app.post("/api/auth/login", async (req, res) => {
@@ -28,9 +29,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Invalid credentials" });
       }
 
+      // Создаем сессию
+      req.session.userId = user.id;
+      req.session.isAuthenticated = true;
+
       res.json({ user: { id: user.id, username: user.username } });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Logout route
+  app.post("/api/auth/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Could not log out" });
+      }
+      res.json({ message: "Logged out successfully" });
+    });
+  });
+
+  // Check auth status
+  app.get("/api/auth/status", (req, res) => {
+    if (req.session && req.session.isAuthenticated) {
+      res.json({ isAuthenticated: true, userId: req.session.userId });
+    } else {
+      res.json({ isAuthenticated: false });
     }
   });
 
@@ -59,7 +83,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/categories", async (req, res) => {
+  app.post("/api/categories", requireAuth, async (req, res) => {
     try {
       const validatedData = insertCategorySchema.parse(req.body);
       const category = await storage.createCategory(validatedData);
@@ -69,7 +93,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/categories/:id", async (req, res) => {
+  app.put("/api/categories/:id", requireAuth, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const validatedData = insertCategorySchema.partial().parse(req.body);
@@ -85,7 +109,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/categories/:id", async (req, res) => {
+  app.delete("/api/categories/:id", requireAuth, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const deleted = await storage.deleteCategory(id);
@@ -137,7 +161,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/products", async (req, res) => {
+  app.post("/api/products", requireAuth, async (req, res) => {
     try {
       const validatedData = insertProductSchema.parse(req.body);
       const product = await storage.createProduct(validatedData);
@@ -147,7 +171,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/products/:id", async (req, res) => {
+  app.put("/api/products/:id", requireAuth, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const validatedData = insertProductSchema.partial().parse(req.body);
@@ -163,7 +187,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/products/:id", async (req, res) => {
+  app.delete("/api/products/:id", requireAuth, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const deleted = await storage.deleteProduct(id);
@@ -198,7 +222,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/requests", async (req, res) => {
+  app.get("/api/requests", requireAuth, async (req, res) => {
     try {
       const requests = await storage.getAllRequests();
       res.json(requests);
