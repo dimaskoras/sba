@@ -216,9 +216,11 @@ export default function Products() {
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogTitle>
-              {editingProduct ? "Редактировать товар" : "Добавить товар"}
-            </DialogTitle>
+            <DialogHeader>
+              <DialogTitle>
+                {editingProduct ? "Редактировать товар" : "Добавить товар"}
+              </DialogTitle>
+            </DialogHeader>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">

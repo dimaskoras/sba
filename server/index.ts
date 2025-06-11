@@ -1,5 +1,4 @@
 import express, { type Request, Response, NextFunction } from "express";
-import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
@@ -52,15 +51,12 @@ app.use((req, res, next) => {
     }
 
     res.status(status).json({ message });
-
+    
     // Логируем ошибку только если это не ошибка валидации файла
     if (status >= 500) {
       console.error('Server error:', err);
     }
   });
-
-  // Статическая раздача загруженных изображений
-  app.use('/uploads', express.static(path.join(process.cwd(), 'photosran')));
 
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
