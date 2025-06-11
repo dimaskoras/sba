@@ -68,7 +68,18 @@ export function Layout({ children }: LayoutProps) {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center">
-              <div className="bg-brand-primary text-white rounded-lg p-3 mr-3">
+              <img 
+                src="/logo.png" 
+                alt="SmartBuildAstana Logo"
+                className="w-12 h-12 rounded-lg mr-3 object-cover"
+                onError={(e) => {
+                  // Fallback to icon if image fails to load
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.nextElementSibling?.classList.remove('hidden');
+                }}
+              />
+              <div className="bg-brand-primary text-white rounded-lg p-3 mr-3 hidden">
                 <Home className="w-6 h-6" />
               </div>
               <div>
@@ -152,7 +163,18 @@ export function Layout({ children }: LayoutProps) {
             {/* Company info */}
             <div className="mb-8 lg:mb-0">
               <div className="flex items-center mb-4">
-                <div className="bg-brand-primary text-white rounded-lg p-2 mr-3">
+                <img 
+                  src="/logo.png" 
+                  alt="SmartBuildAstana Logo"
+                  className="w-10 h-10 rounded-lg mr-3 object-cover"
+                  onError={(e) => {
+                    // Fallback to icon if image fails to load
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    target.nextElementSibling?.classList.remove('hidden');
+                  }}
+                />
+                <div className="bg-brand-primary text-white rounded-lg p-2 mr-3 hidden">
                   <Home className="w-5 h-5" />
                 </div>
                 <div>
