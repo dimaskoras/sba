@@ -104,7 +104,7 @@ export default function Categories() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     try {
       const validatedData = insertCategorySchema.parse(formData);
 
@@ -172,9 +172,11 @@ export default function Categories() {
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
-            <DialogTitle>
-              {editingCategory ? "Редактировать категорию" : "Добавить категорию"}
-            </DialogTitle>
+            <DialogHeader>
+              <DialogTitle>
+                {editingCategory ? "Редактировать категорию" : "Добавить категорию"}
+              </DialogTitle>
+            </DialogHeader>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
