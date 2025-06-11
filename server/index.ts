@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import path from "path";
 
 const app = express();
 app.use(express.json());
@@ -51,7 +52,7 @@ app.use((req, res, next) => {
     }
 
     res.status(status).json({ message });
-    
+
     // Логируем ошибку только если это не ошибка валидации файла
     if (status >= 500) {
       console.error('Server error:', err);
@@ -78,4 +79,7 @@ app.use((req, res, next) => {
   }, () => {
     log(`serving on port ${port}`);
   });
+
+    // Serve uploaded images
+    app.use('/uploads', express.static(path.join(process.cwd(), 'photosran')));
 })();

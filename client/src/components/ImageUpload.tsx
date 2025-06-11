@@ -18,8 +18,13 @@ export default function ImageUpload({ currentImage, onImageChange, label = "Из
   const { toast } = useToast();
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('File input changed:', event.target.files);
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      console.log('No file selected');
+      return;
+    }
+    console.log('File selected:', file.name, file.type, file.size);
 
     // Предварительная проверка типа файла на клиенте
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -123,17 +128,16 @@ export default function ImageUpload({ currentImage, onImageChange, label = "Из
           className="hidden"
           id="image-upload"
         />
-        <Label htmlFor="image-upload" asChild>
-          <Button
-            type="button"
-            variant="outline"
-            disabled={uploading}
-            className="cursor-pointer"
-          >
-            <Upload className="w-4 h-4 mr-2" />
-            {uploading ? "Загрузка..." : "Выбрать файл"}
-          </Button>
-        </Label>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={uploading}
+          className="cursor-pointer"
+          onClick={() => document.getElementById('image-upload')?.click()}
+        >
+          <Upload className="w-4 h-4 mr-2" />
+          {uploading ? "Загрузка..." : "Выбрать файл"}
+        </Button>
       </div>
       
       <p className="text-xs text-gray-500">
