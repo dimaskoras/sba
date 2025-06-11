@@ -1,0 +1,49 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "admin123"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name_ru": "Кровельные материалы",
+      "name_kz": "Шатыр материалдары",
+      "description_ru": "Металлочерепица, профнастил, ондулин и другие кровельные покрытия",
+      "description_kz": "Металл плитка, профнастил, ондулин және басқа шатыр жабындары",
+      "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200"
+    },
+    {
+      "id": 2,
+      "name_ru": "Утеплители",
+      "name_kz": "Жылу оқшаулағыштар",
+      "description_ru": "Минеральная вата, пенопласт, пенополистирол для утепления зданий",
+      "description_kz": "Минералды мақта, көбік, ғимараттарды жылытуға арналған көбікті полистирол",
+      "image_url": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name_ru": "Металлочерепица Монтеррей",
+      "name_kz": "Монтеррей металл плиткасы",
+      "description_ru": "Высококачественная металлочерепица с полимерным покрытием. Толщина 0.5мм, гарантия 15 лет.",
+      "description_kz": "Полимерлі жабынды жоғары сапалы металл плитка. Қалыңдығы 0,5мм, кепілдік 15 жыл.",
+      "price": "2500",
+      "unit_ru": "м²",
+      "unit_kz": "м²",
+      "category_id": 1,
+      "image_url": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
+      "in_stock": true
+    }
+  ],
+  "requests": [],
+  "counters": {
+    "userId": 2,
+    "categoryId": 3,
+    "productId": 2,
+    "requestId": 1
+  }
+}

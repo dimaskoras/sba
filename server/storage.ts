@@ -31,121 +31,9 @@ import { FileStorage } from './fileStorage';
 
 export class MemStorage implements IStorage {
   private fileStorage: FileStorage;
-  private users: Map<number, User>;
-  private categories: Map<number, Category>;
-  private products: Map<number, Product>;
-  private requests: Map<number, Request>;
-  private currentUserId: number;
-  private currentCategoryId: number;
-  private currentProductId: number;
-  private currentRequestId: number;
 
   constructor() {
-    this.users = new Map();
-    this.categories = new Map();
-    this.products = new Map();
-    this.requests = new Map();
-    this.currentUserId = 1;
-    this.currentCategoryId = 1;
-    this.currentProductId = 1;
-    this.currentRequestId = 1;
-
-    // Create default admin user
-    this.createUser({
-      username: "admin",
-      password: "admin123"
-    });
-
-    // Create default categories
-    this.initializeDefaultData();
-  }
-
-  private async initializeDefaultData() {
-    // Categories
-    await this.createCategory({
-      name_ru: "Кровельные материалы",
-      name_kz: "Шатыр материалдары",
-      description_ru: "Металлочерепица, профнастил, ондулин и другие кровельные покрытия",
-      description_kz: "Металл плитка, профнастил, ондулин және басқа шатыр жабындары",
-      image_url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
-    });
-
-    await this.createCategory({
-      name_ru: "Сайдинг",
-      name_kz: "Сайдинг",
-      description_ru: "Виниловый, металлический и деревянный сайдинг для отделки фасадов",
-      description_kz: "Винил, металл және ағаш сайдинг фасадтарды әшекейлеу үшін",
-      image_url: "https://images.unsplash.com/photo-1448630360428-65456885c650?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
-    });
-
-    await this.createCategory({
-      name_ru: "Водосточные системы",
-      name_kz: "Су ағызу жүйелері",
-      description_ru: "Желоба, трубы, воронки и комплектующие для водостока",
-      description_kz: "Науалар, құбырлар, воронкалар және су ағызу үшін жинақтаушылар",
-      image_url: "https://images.unsplash.com/photo-1541123437800-1bb1317badc2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
-    });
-
-    await this.createCategory({
-      name_ru: "Комплектующие",
-      name_kz: "Жинақтаушылар",
-      description_ru: "Крепежные элементы, инструменты и аксессуары",
-      description_kz: "Бекіту элементтері, құралдар және аксессуарлар",
-      image_url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
-    });
-
-    // Products
-    await this.createProduct({
-      name_ru: "Металлочерепица Монтеррей",
-      name_kz: "Металл плитка Монтеррей",
-      description_ru: "Покрытие полиэстер, толщина 0.5мм",
-      description_kz: "Полиэфир жабын, қалыңдығы 0.5мм",
-      price: "2850.00",
-      unit_ru: "м²",
-      unit_kz: "м²",
-      category_id: 1,
-      image_url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
-      in_stock: true
-    });
-
-    await this.createProduct({
-      name_ru: "Сайдинг виниловый",
-      name_kz: "Винил сайдинг",
-      description_ru: "Цвет белый, размер 3.66x0.23м",
-      description_kz: "Ақ түс, өлшемі 3.66x0.23м",
-      price: "1250.00",
-      unit_ru: "панель",
-      unit_kz: "панель",
-      category_id: 2,
-      image_url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
-      in_stock: true
-    });
-
-    await this.createProduct({
-      name_ru: "Желоб водосточный",
-      name_kz: "Су ағызатын науа",
-      description_ru: "Оцинкованный, диаметр 125мм",
-      description_kz: "Мырышталған, диаметрі 125мм",
-      price: "890.00",
-      unit_ru: "пм",
-      unit_kz: "пм",
-      category_id: 3,
-      image_url: "https://images.unsplash.com/photo-1541123437800-1bb1317badc2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
-      in_stock: true
-    });
-
-    await this.createProduct({
-      name_ru: "Саморезы кровельные",
-      name_kz: "Шатыр бұрандалары",
-      description_ru: "С прокладкой, 4.8x29мм",
-      description_kz: "Төсеніш пен, 4.8x29мм",
-      price: "12.00",
-      unit_ru: "шт",
-      unit_kz: "дана",
-      category_id: 4,
-      image_url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
-      in_stock: true
-    });
+    this.fileStorage = new FileStorage();
   }
 
   // Users
@@ -272,4 +160,6 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+import { FileBasedStorage } from './fileBasedStorage';
+
+export const storage = new FileBasedStorage();
