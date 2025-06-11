@@ -4,7 +4,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Layout } from "@/components/Layout";
-import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { AuthProvider } from "@/hooks/useAuth";
+import { useServerAuth } from "@/hooks/useServerAuth";
 import { ProtectedAdminRoute } from "@/components/ProtectedAdminRoute";
 
 // Pages
@@ -20,11 +21,11 @@ import AdminRequests from "@/pages/admin/Requests";
 import NotFound from "@/pages/not-found";
 
 function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { logout, user } = useAuth();
+  const { logout, user } = useServerAuth();
   const [, setLocation] = useLocation();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     setLocation("/admin/login");
   };
 

@@ -22,6 +22,14 @@
       "description_ru": "Минеральная вата, пенопласт, пенополистирол для утепления зданий",
       "description_kz": "Минералды мақта, көбік, ғимараттарды жылытуға арналған көбікті полистирол",
       "image_url": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200"
+    },
+    {
+      "name_ru": "Кровля",
+      "name_kz": "Кровля",
+      "description_ru": "Кровля",
+      "description_kz": "Кровля",
+      "image_url": "/uploads/0a59f584-710a-4e33-8ae1-24a5f301a9f6.jpg",
+      "id": 3
     }
   ],
   "products": [
@@ -42,7 +50,7 @@
   "requests": [],
   "counters": {
     "userId": 2,
-    "categoryId": 3,
+    "categoryId": 4,
     "productId": 2,
     "requestId": 1
   }
